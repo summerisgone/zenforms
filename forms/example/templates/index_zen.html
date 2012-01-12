@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 {% load zenforms %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/uni-form.css" type="text/css" />
+{{ block.super }}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/default.uni-form.css" type="text/css" />
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/uni-form.jquery.min.js"></script>
+{% endblock %}
+
 {% block content %}
-<h1>User registration form</h1>
-    {% zenform form %}
-    <form action="." method="post">
-    <table>
-    {% fieldset 'My fieldsset' 'username, password1' %}
-    </table>
-    </form>
-    {% endzenform %}
-<a href="..">Ugly</a>
+{% zenform form %}
+    {% fieldset 'My fieldsset' 'username' %}
+    {% fieldset 'My fieldsset 2' 'password1' %}
+    <a href="..">Ugly <tt>as_table()</tt></a>
+{% endzenform %}
 {% endblock %}

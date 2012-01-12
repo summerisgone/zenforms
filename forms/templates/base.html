@@ -3,9 +3,12 @@
 <html>
 <head>
     <title>Django zenforms showcase</title>
-    {% block head %}{% endblock %}
+    {% block head %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/example.css" type="text/css" />
+    {% endblock %}
 </head>
 <body>
+<p class="intro">This is example how <a href="http://sprawsm.com/uni-form/">Uni forms</a> may be used</p>
 {% block content %}{% endblock %}
 </body>
 </html>
