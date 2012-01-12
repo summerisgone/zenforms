@@ -1,0 +1,6 @@
+.idea/*
+.installed.cfg
+eggs/*
+bin/*
+parts/*
+
