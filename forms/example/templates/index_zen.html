@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load zenforms %}
+
+{% block content %}
+<h1>User registration form</h1>
+    {% zenform form %}
+    <form action="." method="post">
+    <table>
+    {% fieldset 'My fieldsset' 'username, password1' %}
+    </table>
+    </form>
+    {% endzenform %}
+<a href="..">Ugly</a>
+{% endblock %}
