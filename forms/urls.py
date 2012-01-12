@@ -13,5 +13,6 @@ if settings.DEBUG:
 
 
 urlpatterns = patterns('',
+    url('^', include('example.urls')),
 )
 
