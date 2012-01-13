@@ -11,17 +11,18 @@
 {% endblock %}
 
 {% block content %}
-
-{% zenform form %}
-    {% readonly admin 'username' 'last_name' label 'Information' as info %}
-    {% fieldset 'username' info title 'User data' %}
-    {% multifield 'password1' 'password2' as passwords  %}
-    {% fieldset passwords title 'The rest' %}
-    {% readonly admin 'username' 'last_name' label 'Information' %}
-    {% readonly admin 'username' label 'Information2' %}
+    {% zenform form %}
+        {% fieldset unused_fields title 'Profile' %}
+        {{ formset.management_form }}
     {% submit %}
+    {% endzenform %}
+    {% for form_in_set in formset %}
+        {% zenform form_in_set %}
+            {% fieldset unused_fields title 'Card' %}
+            {% submit %}
+        {% endzenform %}
+    {% endfor %}
     <a href="{% url index %}">Registration form</a>
     <a href="{% url formset %}">Ugly Formset</a>
-{% endzenform %}
 
 {% endblock %}

@@ -17,7 +17,7 @@ def index(request, template_name):
         context_instance=RequestContext(request))
 
 def profile(request, template_name):
-    CardFormset = inlineformset_factory(Profile, Card, extra=2)
+    CardFormset = inlineformset_factory(Profile, Card, extra=2, can_delete=False)
     ProfileForm = modelform_factory(Profile, exclude='user')
 
     if request.user.is_anonymous():
