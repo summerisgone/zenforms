@@ -110,7 +110,7 @@ CONTEXT_PROCESSORS =[
     'staticfiles.context_processors.static',
 ]
 
-ROOT_URLCONF = 'forms.urls'
+ROOT_URLCONF = 'myproject.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
