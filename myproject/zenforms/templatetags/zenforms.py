@@ -23,10 +23,48 @@ class Multifield(object):
             try:
                 self.fields.append(self.form[field_name])
             except KeyError:
-                raise TemplateError('form does not contain field %s' % field)
+                raise TemplateError('form does not contain field %s' % field_name)
 
 
 class ZenformTag(Tag):
+    """
+    Zenform tag is main application tag, it starts with ``{% zenform %}`` and ends with ``{% endzenform %}``
+
+    **Usage** ::
+
+        {% zenform form options %}
+            Your form goes here!
+            {% fielset unused_fields title 'All my form' %} <- for example
+        {% endzenform %}
+
+    **Context**
+
+    * ``form`` - original form, passed in arguments
+    * ``unused_fields`` - fields, that were not rendered within the tag.
+
+      Tag can watch what fields are unused only when you are rendering them with
+      'zenforms'* tags. I.e. it couldn't track used and unused fields if you
+      place them manually.
+
+
+    **Templates**
+
+    Tags ``{% zenform %}`` and ``{% endzenform %}`` use two templates to wrap the rendered form:
+
+    * ``zenforms/zenform_prefix.html``
+    * ``zenforms/zenform_postfix.html``
+
+    You are welcome to ovreride them in your project.
+
+    **Example**
+
+    Render Django's default ``UserCreationForm``::
+
+        {% zenform form %}
+            {% fieldset 'username' title 'User data' %}
+            {% fieldset unused_fields title 'The rest' %}
+        {% endzenform %}
+    """
     name = 'zenform'
     options = Options(
         Argument('form'),
