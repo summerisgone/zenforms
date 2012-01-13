@@ -1,7 +1,19 @@
 <div class="ctrlHolder">
-    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-    {{ field }}
-    {% if field.help_text %}
-    <p class="formHint">{{ field.help_text }}</p>
+    {% if field|length %}
+        <label for="{{ field.0.id_for_label }}">{{ field.0.label }}</label>
+        <ul>
+        {% for subfield in field %}
+            <li>{{ subfield }}</li>
+        {% endfor %}
+        </ul>
+        {% if field.0.help_text %}
+        <p class="formHint">{{ field.0.help_text }}</p>
+        {% endif %}
+    {% else %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+        <p class="formHint">{{ field.help_text }}</p>
+        {% endif %}
     {% endif %}
 </div>
