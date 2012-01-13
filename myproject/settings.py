@@ -2,6 +2,8 @@
 # Django settings for forms project.
 
 import os
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -12,13 +14,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'forms.sqlite',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'NAME': os.path.join(PROJECT_ROOT, 'forms.sqlite'),
     }
 }
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -43,7 +42,6 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')

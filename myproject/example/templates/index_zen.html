@@ -13,8 +13,12 @@
 {% block content %}
 
 {% zenform form %}
-    {% fieldset 'username' title 'User data' %}
-    {% fieldset unused_fields title 'The rest' %}
+    {% readonly admin 'username' 'last_name' label 'Information' as info %}
+    {% fieldset 'username' info title 'User data' %}
+    {% multifield 'password1' 'password2' as passwords  %}
+    {% fieldset passwords title 'The rest' %}
+    {% readonly admin 'username' 'last_name' label 'Information' %}
+    {% readonly admin 'username' label 'Information2' %}
     {% submit %}
     <a href="..">Ugly <tt>as_table()</tt></a>
 {% endzenform %}

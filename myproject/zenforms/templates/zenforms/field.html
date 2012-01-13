@@ -1,22 +1,30 @@
-<div class="ctrlHolder">
-    {% if field.fields %}
-        <label >{{ field.label }}</label>
-        <ul>
-        {% for subfield in field.fields %}
-            <li>
-                <label for="{{ subfield.id_for_label }}">{{ subfield.label }}</label>
-                {{ subfield }}
-            </li>
-        {% endfor %}
-        </ul>
-        {% for subfield in field.fields %}
-            <p class="formHint">{{ subfield.help_text }}</p>
-        {% endfor %}
+{% if field.multifield %}
+    <div class="ctrlHolder">
+    <label >{{ field.label }}</label>
+    <ul>
+    {% for subfield in field.fields %}
+        <li>
+            <label for="{{ subfield.id_for_label }}">{{ subfield.label }}</label>
+            {{ subfield }}
+        </li>
+    {% endfor %}
+    </ul>
+    {% for subfield in field.fields %}
+        <p class="formHint">{{ subfield.help_text }}</p>
+    {% endfor %}
+    </div>
+{% else %}
+    {% if field.readonly %}
+        {% with field as readonly %}
+        {% include "zenforms/readonly.html" %}
+        {% endwith %}
     {% else %}
+        <div class="ctrlHolder">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
         {% if field.help_text %}
             <p class="formHint">{{ field.help_text }}</p>
         {% endif %}
+        </div>
     {% endif %}
-</div>
+{% endif %}

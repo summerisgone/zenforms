@@ -2,6 +2,7 @@
 from classytags.core import Tag, Options
 from classytags.arguments import Argument, MultiValueArgument
 from django import template
+from django.db.models.fields import FieldDoesNotExist
 from django.template import loader
 from django.utils.safestring import SafeUnicode
 
@@ -12,7 +13,8 @@ class TemplateError(Exception):
     pass
 
 
-class Multifield(object):
+class MultiField(object):
+    multifield = True  # For easier template composing
 
     def __init__(self, form, fields, label):
         self.form = form
@@ -25,6 +27,15 @@ class Multifield(object):
             except KeyError:
                 raise TemplateError('form does not contain field %s' % field_name)
 
+class ReadonlyField(object):
+    readonly = True  # For easier template composing
+
+    def __init__(self, label, help_text, meta=None, value=None, fields=None):
+        self.label = label
+        self.help_text = help_text
+        self.meta = meta
+        self.value = value
+        self.fields = fields
 
 class ZenformTag(Tag):
     """
@@ -93,7 +104,7 @@ class MultifieldTag(Tag):
     options = Options(
         MultiValueArgument('fields'),
         'as',
-        Argument('varname'),
+        Argument('varname', resolve=False),
         'label',
         Argument('label', required=False),
     )
@@ -103,7 +114,7 @@ class MultifieldTag(Tag):
             form = context['form']
         except KeyError:
             raise TemplateError('fieldset tag must be used in {% zenform %}{% endzenform %} context')
-        multifield = Multifield(form, fields, label)
+        multifield = MultiField(form, fields, label)
         return multifield
 
     def render_tag(self, context, fields, varname, label):
@@ -133,10 +144,12 @@ class FieldsetTag(Tag):
                 if type(field) in [SafeUnicode, str]:
                     tag_context['fields'].append(form[field])
                     unused_fields.remove(field)
-                elif type(field) is Multifield:
+                elif type(field) is MultiField:
                     tag_context['fields'].append(field)
                     for fname in field.field_names:
                         unused_fields.remove(fname)
+                elif type(field) is ReadonlyField:
+                    tag_context['fields'].append(field)
             except KeyError:
                 raise TemplateError('form does not contain field %s' % field)
 
@@ -173,7 +186,56 @@ class Submit(Tag):
         context.pop()
         return output
 
+
+class ReadonlyTag(Tag):
+    name = 'readonly'
+    template = 'zenforms/readonly.html'
+    options = Options(
+        Argument('instance'),
+        MultiValueArgument('fields'),
+        'label',
+        Argument('label', required=False, default=None),
+        'as',
+        Argument('varname', resolve=False, required=False, default=None),
+    )
+
+    def get_context(self, instance, field_names, label):
+        opts = instance._meta
+        context = {}
+        fields = []
+        for fname in field_names:
+            try:
+                f = opts.get_field_by_name(fname)[0]
+            except FieldDoesNotExist:
+                raise TemplateError('Field %s not exists in a model' % fname)
+            else:
+                fields.append({'value': f.value_from_object(instance), 'meta': f})
+
+        context['fields'] = fields
+        if label:
+            context['label'] = label
+        else:
+            context['label'] = fields[0]['meta'].verbose_name
+
+        context['help_text'] = fields[0]['meta'].help_text
+        return context
+
+    def render_tag(self, context, instance, fields, label, varname):
+        ctx = self.get_context(instance, fields, label)
+        if varname:
+            context[varname] = ReadonlyField(**ctx)
+            return u''
+        else:
+            context.push()
+            context.update({'readonly': ctx})
+            template = loader.get_template(self.template)
+            output = template.render(context)
+            context.pop()
+            return output
+
+
 register.tag(ZenformTag)
 register.tag(MultifieldTag)
 register.tag(FieldsetTag)
 register.tag(Submit)
+register.tag(ReadonlyTag)
