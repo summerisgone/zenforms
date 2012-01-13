@@ -13,15 +13,15 @@
 {% block content %}
 
 {% zenform form %}
-{#    {% readonly admin 'username' 'last_name' label 'Information' as info %}#}
-    {% fieldset 'username' title 'User data' %}
+    {% readonly admin 'username' 'last_name' label 'Information' as info %}
+    {% fieldset 'username' info title 'User data' %}
     {% multifield 'password1' 'password2' as passwords  %}
     {% fieldset passwords title 'The rest' %}
-{#    {% readonly admin 'username' 'last_name' label 'Information' %}#}
-{#    {% readonly admin 'username' label 'Information2' %}#}
+    {% readonly admin 'username' 'last_name' label 'Information' %}
+    {% readonly admin 'username' label 'Information2' %}
     {% submit %}
-    <a href="{% url index %}">Ugly Registration form</a>
-    <a href="{% url formset %}">Formset</a>
+    <a href="{% url index %}">Registration form</a>
+    <a href="{% url formset %}">Ugly Formset</a>
 {% endzenform %}
 
 {% endblock %}

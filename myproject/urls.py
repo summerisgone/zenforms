@@ -1,8 +1,10 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.contrib import admin
 from staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('')
+admin.autodiscover()
 
 if settings.DEBUG:
 #    urlpatterns += patterns('',
@@ -13,6 +15,7 @@ if settings.DEBUG:
 
 
 urlpatterns = patterns('',
+    (r'^admin/', include(admin.site.urls)),
     url('^', include('example.urls')),
 )
 

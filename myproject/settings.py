@@ -123,10 +123,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.admin',
     'staticfiles',
     'zenforms',
     'example',
 ]
+
+AUTH_PROFILE_MODULE = 'example.Profile'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

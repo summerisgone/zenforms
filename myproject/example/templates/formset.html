@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Formset usage</h1>
+    <form action="." method="post">
+    {{ form.as_p }}
+    {{ formset.as_p }}
+    </form>
+<a href="{% url index %}">Registration form</a>
+<a href="{% url formset_zen %}">Zen Formset</a>
+{% endblock %}
