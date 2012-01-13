@@ -8,5 +8,4 @@ def index(request, template_name):
         form = UserCreationForm(request.POST)
     else:
        form = UserCreationForm()
-    print template_name
     return render_to_response(template_name, {'form': form}, context_instance=RequestContext(request))
