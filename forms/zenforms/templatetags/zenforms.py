@@ -3,6 +3,7 @@ from classytags.core import Tag, Options
 from classytags.arguments import Argument, MultiValueArgument
 from django import template
 from django.template import loader
+from django.utils.safestring import SafeUnicode
 
 
 register = template.Library()
@@ -10,7 +11,22 @@ register = template.Library()
 class TemplateError(Exception):
     pass
 
-class Zenform(Tag):
+
+class Multifield(object):
+
+    def __init__(self, form, fields, label):
+        self.form = form
+        self.field_names = fields
+        self.label = label
+        self.fields = []
+        for field_name in self.field_names:
+            try:
+                self.fields.append(self.form[field_name])
+            except KeyError:
+                raise TemplateError('form does not contain field %s' % field)
+
+
+class ZenformTag(Tag):
     name = 'zenform'
     options = Options(
         Argument('form'),
@@ -34,7 +50,32 @@ class Zenform(Tag):
         return template.render(context)
 
 
-class Fieldset(Tag):
+class MultifieldTag(Tag):
+    name = 'multifield'
+    options = Options(
+        MultiValueArgument('fields'),
+        'as',
+        Argument('varname'),
+        'label',
+        Argument('label', required=False),
+    )
+
+    def create_multifield(self, context, fields, label):
+        try:
+            form = context['form']
+        except KeyError:
+            raise TemplateError('fieldset tag must be used in {% zenform %}{% endzenform %} context')
+        multifield = Multifield(form, fields, label)
+        return multifield
+
+    def render_tag(self, context, fields, varname, label):
+        mf = self.create_multifield(context, fields, label)
+        print mf
+        context[varname] = mf
+        return u''
+
+
+class FieldsetTag(Tag):
     name = 'fieldset'
     options = Options(
         MultiValueArgument('fields'),
@@ -43,21 +84,21 @@ class Fieldset(Tag):
     )
     template = 'zenforms/fieldset.html'
 
-    def udpate_context(self, field, form, tag_context, unused_fields):
-        if ',' in field:
-            multifield = []
-            for fname in [e.strip() for e in field.split(',')]:
-                try:
-                    multifield.append(form[fname])
-                    unused_fields.remove(fname)
-                except KeyError:
-                    raise TemplateError('form does not contain field %s' % field)
-
-            tag_context['fields'].append(multifield)
+    def udpate_context(self, fields, form, tag_context, unused_fields):
+        if type(fields) is list and fields[0] == unused_fields:
+            # ``unused_fields`` is the argument
+            iterable = tuple(unused_fields)
         else:
+            iterable = fields
+        for field in iterable:
             try:
-                tag_context['fields'].append(form[field])
-                unused_fields.remove(field)
+                if type(field) in [SafeUnicode, str]:
+                    tag_context['fields'].append(form[field])
+                    unused_fields.remove(field)
+                elif type(field) is Multifield:
+                    tag_context['fields'].append(field)
+                    for fname in field.field_names:
+                        unused_fields.remove(fname)
             except KeyError:
                 raise TemplateError('form does not contain field %s' % field)
 
@@ -68,9 +109,7 @@ class Fieldset(Tag):
             unused_fields = context['unused_fields']
         except KeyError:
             raise TemplateError('fieldset tag must be used in {% zenform %}{% endzenform %} context')
-        for field in fields:
-            # TODO: Обработка списка полей
-            self.udpate_context(field, form, tag_context, unused_fields)
+        self.udpate_context(fields, form, tag_context, unused_fields)
         context.update(tag_context)
         return context
 
@@ -81,5 +120,22 @@ class Fieldset(Tag):
         return output
 
 
-register.tag(Zenform)
-register.tag(Fieldset)
+class Submit(Tag):
+    name = 'submit'
+    template = 'zenforms/submit.html'
+    options = Options(
+        Argument('value', required=False, default='Submit'),
+    )
+
+    def render_tag(self, context, value):
+        context.push()
+        context['value'] = value
+        template = loader.get_template(self.template)
+        output = template.render(context)
+        context.pop()
+        return output
+
+register.tag(ZenformTag)
+register.tag(MultifieldTag)
+register.tag(FieldsetTag)
+register.tag(Submit)

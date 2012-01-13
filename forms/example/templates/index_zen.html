@@ -11,9 +11,12 @@
 {% endblock %}
 
 {% block content %}
+
 {% zenform form %}
     {% fieldset 'username' title 'User data' %}
-    {% fieldset 'password1, password2' %}
+    {% fieldset unused_fields title 'The rest' %}
+    {% submit %}
     <a href="..">Ugly <tt>as_table()</tt></a>
 {% endzenform %}
+
 {% endblock %}
