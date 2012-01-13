@@ -12,8 +12,8 @@
 
 {% block content %}
 {% zenform form %}
-    {% fieldset 'My fieldsset' 'username' %}
-    {% fieldset 'My fieldsset 2' 'password1' %}
+    {% fieldset 'username' 'password1' title 'My fieldset' %}
+    {% fieldset 'password2' %}
     <a href="..">Ugly <tt>as_table()</tt></a>
 {% endzenform %}
 {% endblock %}

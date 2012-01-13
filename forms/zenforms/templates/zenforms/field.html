@@ -1,0 +1,7 @@
+<div class="ctrlHolder">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}
+    <p class="formHint">{{ field.help_text }}</p>
+    {% endif %}
+</div>

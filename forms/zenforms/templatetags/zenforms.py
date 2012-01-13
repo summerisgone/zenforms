@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from classytags.core import Tag, Options
-from classytags.arguments import Argument
+from classytags.arguments import Argument, MultiValueArgument
 from django import template
 from django.template import loader
 
@@ -37,24 +37,21 @@ class Zenform(Tag):
 class Fieldset(Tag):
     name = 'fieldset'
     options = Options(
-        Argument('title'),
-        Argument('fields')
+        MultiValueArgument('fields'),
+        'title',
+        Argument('title', required=False),
     )
     template = 'zenforms/fieldset.html'
 
-    def split_fields(self, fields_str):
-        fields = [e.strip() for e in fields_str.split(',')]
-        return fields
-
-    def get_context(self, context, title, fields_str):
+    def get_context(self, context, title, fields):
         tag_context = {'fields': [], 'title': title}
         try:
             form = context['form']
             unused_fields = context['unused_fields']
         except KeyError:
             raise TemplateError('fieldset tag must be used in {% zenform %}{% endzenform %} context')
-        fields = self.split_fields(fields_str)
         for field in fields:
+            # TODO: Обработка списка полей
             try:
                 tag_context['fields'].append(form[field])
                 unused_fields.remove(field)
