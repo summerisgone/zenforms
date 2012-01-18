@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from classytags.core import Tag, Options
-from classytags.arguments import Argument, MultiValueArgument
+from classytags.arguments import Argument, MultiValueArgument, MultiKeywordArgument
 from django import template
 from django.db.models.fields import FieldDoesNotExist
 from django.template import loader
 from django.utils.safestring import SafeUnicode
 
-
+DEFAULT_OPTIONS = {
+    'method': 'post',
+    'action': '.',
+}
 register = template.Library()
 
 class TemplateError(Exception):
@@ -79,12 +82,17 @@ class ZenformTag(Tag):
     name = 'zenform'
     options = Options(
         Argument('form'),
+        'options',
+        MultiKeywordArgument('options', required=False, default=DEFAULT_OPTIONS),
         blocks=[('endzenform', 'nodelist')],
     )
 
-    def render_tag(self, context, form, nodelist):
+    def render_tag(self, context, form, options, nodelist):
         context.push()
+        real_options = DEFAULT_OPTIONS.copy()
+        real_options.update(options)
         context['form'] = form
+        context['options'] = real_options
         context['unused_fields'] = form.fields.keys()
         output = self.render_prefix(context) + nodelist.render(context) + self.render_postfix(context)
         context.pop()

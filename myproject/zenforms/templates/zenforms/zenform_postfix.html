@@ -1,6 +1,8 @@
-Unused: {{ unused_fields }}
 {% csrf_token %}
-</form>
-<script type="text/javascript">
-    $('form.uniForm').uniform();
-</script>
+{% if options.no_form_tag %}
+{% else %}
+    </form>
+    <script type="text/javascript">
+        $('form.uniForm').uniform();
+    </script>
+{% endif %}

@@ -1,1 +1,15 @@
-<form class="uniForm" action="." method="post" enctype="application/x-www-form-urlencoded">
+{% if options.no_form_tag %}
+{% else %}
+    <form class="uniForm" action="{{ options.action }}" method="{{ options.method }}" enctype="application/x-www-form-urlencoded">
+{% endif %}
+{% if form.non_field_errors %}
+    <div id="errorMsg">
+        {% load i18n %}
+        {% if form_error_title %}<h3>{% trans "Please correct errors below" %}</h3>{% endif %}
+        <ol>
+            {% for error in form.non_field_errors %}
+                <li>{{ erorr }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+{% endif %}
