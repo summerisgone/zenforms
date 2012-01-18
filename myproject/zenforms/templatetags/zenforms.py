@@ -127,7 +127,6 @@ class MultifieldTag(Tag):
 
     def render_tag(self, context, fields, varname, label):
         mf = self.create_multifield(context, fields, label)
-        print mf
         context[varname] = mf
         return u''
 
@@ -197,7 +196,7 @@ class Submit(Tag):
 
 class ReadonlyTag(Tag):
     name = 'readonly'
-    template = 'zenforms/readonly.html'
+    template = 'zenforms/fields/readonly.html'
     options = Options(
         Argument('instance'),
         MultiValueArgument('fields'),
