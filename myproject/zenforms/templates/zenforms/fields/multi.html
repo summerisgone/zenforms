@@ -1,0 +1,19 @@
+<div class="ctrlHolder {% for subfield in field.fields %}{% if subfield.errors %}error {% endif %}{% endfor %}">
+<label >{{ field.label }}</label>
+<ul>
+{% for subfield in field.fields %}
+    <li>
+        <label for="{{ subfield.id_for_label }}">{{ subfield.label }}</label>
+        {{ subfield }}
+    </li>
+{% endfor %}
+</ul>
+{% for subfield in field.fields %}
+    {% if subfield.help_text %}
+    <p class="formHint">{{ subfield.help_text }}</p>
+    {% endif %}
+    {% if subfield.errors %}
+        {{ subfield.errors }}
+    {% endif %}
+{% endfor %}
+</div>

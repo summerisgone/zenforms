@@ -1,0 +1,12 @@
+{% if not field.field.widget.is_hidden %}
+<div class="ctrlHolder {% if field.errors %}error{% endif %}">
+<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+{{ field }}
+{% if field.help_text %}
+    <p class="formHint">{{ field.help_text }}</p>
+{% endif %}
+{% if field.errors %}
+    {{ field.errors }}
+{% endif %}
+</div>
+{% endif %}

@@ -162,3 +162,21 @@
 /* Columns */
 .uniForm .col{ float: left; }
 .uniForm .col{ width: 50%; }
+
+
+/*** Added by django-zenforms ***/
+.uniForm .errorlist {
+    float: right;
+    width: 43%;
+    margin: 0;
+    clear: none;
+}
+
+.uniForm .errorlist li {
+    margin: 0 0 3px 1.5em;
+    padding: 7px;
+    background: #F6BEC1;
+    position: relative;
+    font-size: .85em;
+    border-radius: 4px;
+}
