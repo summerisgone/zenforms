@@ -28,8 +28,9 @@ def profile(request, template_name):
     if request.method == 'POST':
         formset = CardFormset(request.POST, instance=current_profile)
         form = ProfileForm(request.POST, instance=current_profile)
-        if formset.is_valid():
-            pass
+        if formset.is_valid() and form.is_valid():
+            if all(f.is_valid() for f in formset):
+                print 'valid!'
     else:
         formset = CardFormset(instance=current_profile)
         form = ProfileForm(instance=current_profile)

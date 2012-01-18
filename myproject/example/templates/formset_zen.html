@@ -11,18 +11,27 @@
 {% endblock %}
 
 {% block content %}
-    {% zenform form %}
-        {% fieldset unused_fields title 'Profile' %}
+    <form class="uniForm" action="" method="post">
+    {% zenform form options no_form_tag=1%}
+        {% fieldset 'address' 'address2' 'sex' 'postal_code' 'age' title 'Profile' %}
+        {% multifield 'phone1' 'phone2' as phones label 'Phones' %}
+        {% fieldset phones %}
         {{ formset.management_form }}
-    {% submit %}
     {% endzenform %}
+
+{% comment %}
     {% for form_in_set in formset %}
-        {% zenform form_in_set %}
+        {% zenform form_in_set options action="." no_form_tag=1 %}
             {% fieldset unused_fields title 'Card' %}
-            {% submit %}
         {% endzenform %}
     {% endfor %}
+{% endcomment %}
+    {% submit %}
+    </form>
     <a href="{% url index %}">Registration form</a>
     <a href="{% url formset %}">Ugly Formset</a>
+    <script type="text/javascript">
+        $('form.uniForm').uniform();
+    </script>
 
 {% endblock %}
