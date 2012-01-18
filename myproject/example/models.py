@@ -19,6 +19,7 @@ class Profile(models.Model):
     age = models.IntegerField(verbose_name='Age', default=17)
     phone1 = models.CharField(verbose_name='Primary phone', max_length=12)
     phone2 = models.CharField(verbose_name='Alternate phone', max_length=12)
+    vip = models.BooleanField(verbose_name='VIP preson', help_text='Set this flag only if you are sure')
 
 
 class Card(models.Model):

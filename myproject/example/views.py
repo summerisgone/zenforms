@@ -1,4 +1,5 @@
 # Create your views here.
+from django import forms
 from django.forms.models import modelform_factory
 from django.forms.formsets import formset_factory
 from django.forms.models import inlineformset_factory
@@ -18,12 +19,20 @@ def index(request, template_name):
 
 def profile(request, template_name):
     CardFormset = inlineformset_factory(Profile, Card, extra=2, can_delete=False)
-    ProfileForm = modelform_factory(Profile, exclude='user')
+#    ProfileForm = modelform_factory(Profile, exclude='user')
+
+    class ProfileForm(forms.ModelForm):
+        class Meta:
+            model = Profile
+            exlude = 'user'
+            widgets = {
+                'sex': forms.RadioSelect(),
+            }
 
     if request.user.is_anonymous():
         current_profile = None
     else:
-        current_profile = Profile.objects.get(user=request.user)
+        current_profile = Profile.objects.filter(user=request.user)[0]
 
     if request.method == 'POST':
         formset = CardFormset(request.POST, instance=current_profile)

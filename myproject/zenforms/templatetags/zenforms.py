@@ -3,6 +3,7 @@ from classytags.core import Tag, Options
 from classytags.arguments import Argument, MultiValueArgument, MultiKeywordArgument
 from django import template
 from django.db.models.fields import FieldDoesNotExist
+from django.forms.forms import BoundField
 from django.template import loader
 from django.utils.safestring import SafeUnicode
 
@@ -240,6 +241,10 @@ class ReadonlyTag(Tag):
             context.pop()
             return output
 
+@register.filter
+def widget_type(field):
+    if isinstance(field, BoundField):
+        return str(field.field.widget.__class__.__name__)
 
 register.tag(ZenformTag)
 register.tag(MultifieldTag)

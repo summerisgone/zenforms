@@ -16,6 +16,7 @@
         {% fieldset 'address' 'address2' 'sex' 'postal_code' 'age' title 'Profile' %}
         {% multifield 'phone1' 'phone2' as phones label 'Phones' %}
         {% fieldset phones %}
+        {% fieldset 'vip' %}
         {{ formset.management_form }}
     {% endzenform %}
 

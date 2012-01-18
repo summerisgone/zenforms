@@ -1,10 +1,20 @@
+{% load zenforms %}
 <div class="ctrlHolder {% for subfield in field.fields %}{% if subfield.errors %}error {% endif %}{% endfor %}">
 <label >{{ field.label }}</label>
 <ul>
 {% for subfield in field.fields %}
     <li>
-        <label for="{{ subfield.id_for_label }}">{{ subfield.label }}</label>
-        {{ subfield }}
+        {% if field|widget_type == 'CheckboxInput' %}
+            <label for="{{ subfield.id_for_label }}">
+                {{ subfield }}
+                {{ subfield.label }}
+            </label>
+        {% else %}
+            <label for="{{ subfield.id_for_label }}">{{ subfield.label }}</label>
+            {{ subfield }}
+        {% endif %}
+
+
     </li>
 {% endfor %}
 </ul>
