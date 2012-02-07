@@ -49,7 +49,7 @@ class ZenformTag(Tag):
 
         {% zenform form options %}
             Your form goes here!
-            {% fielset unused_fields title 'All my form' %} <- for example
+            {% fieldset unused_fields title 'All my form' %} <- for example
         {% endzenform %}
 
     **Context**
@@ -106,6 +106,29 @@ class ZenformTag(Tag):
     def render_postfix(self, context):
         template = loader.get_template('zenforms/zenform_postfix.html')
         return template.render(context)
+
+
+class InlineZenformTag(Tag):
+    name = 'izenform'
+    options = Options(
+        Argument('form'),
+        'options',
+        MultiKeywordArgument('options', required=False, default=DEFAULT_OPTIONS),
+    )
+
+    def render_tag(self, context, form, options):
+        context.push()
+        real_options = DEFAULT_OPTIONS.copy()
+        real_options.update(options)
+        context['form'] = form
+        context['options'] = real_options
+        context['fields'] = form
+        prefix = loader.get_template('zenforms/zenform_prefix.html').render(context)
+        postfix = loader.get_template('zenforms/zenform_postfix.html').render(context)
+        content = loader.get_template('zenforms/zenform_inline.html').render(context)
+        output = prefix + content + postfix
+        context.pop()
+        return output
 
 
 class MultifieldTag(Tag):
@@ -247,6 +270,7 @@ def widget_type(field):
         return str(field.field.widget.__class__.__name__)
 
 register.tag(ZenformTag)
+register.tag(InlineZenformTag)
 register.tag(MultifieldTag)
 register.tag(FieldsetTag)
 register.tag(Submit)

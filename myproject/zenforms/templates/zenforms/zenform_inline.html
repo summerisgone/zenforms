@@ -1,8 +1,5 @@
-{% csrf_token %}
-{% if options.no_form_tag %}
-{% else %}
-    </form>
-    <script type="text/javascript">
-//        $('form.uniForm').uniform();
-    </script>
-{% endif %}
+<fieldset>
+{% for field in fields %}
+    {% include 'zenforms/field.html' %}
+{% endfor %}
+</fieldset>
