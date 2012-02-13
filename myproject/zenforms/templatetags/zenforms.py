@@ -20,6 +20,9 @@ class TemplateError(Exception):
 
 
 class MultiField(object):
+    """
+    Inner object for ``MultifieldTag`` class rendering. You probably don't need to know about this class
+    """
     multifield = True  # For easier template composing
 
     def __init__(self, form, fields, label):
@@ -34,6 +37,10 @@ class MultiField(object):
                 raise TemplateError('form does not contain field %s' % field_name)
 
 class ReadonlyField(object):
+    """
+    Inner object used for object representing in ``ReadonlyTag``.
+    You probably don't need to know about this class too.
+    """
     readonly = True  # For easier template composing
 
     def __init__(self, label, help_text, meta=None, value=None, fields=None):
@@ -45,6 +52,7 @@ class ReadonlyField(object):
 
 class ZenformTag(Tag):
     """
+
     Zenform tag is main application tag, it starts with ``{% zenform %}`` and ends with ``{% endzenform %}``
 
     **Usage** ::
@@ -59,8 +67,8 @@ class ZenformTag(Tag):
     * ``form`` - original form, passed in arguments
     * ``unused_fields`` - fields, that were not rendered within the tag.
 
-      Tag can watch what fields are unused only when you are rendering them with
-      'zenforms'* tags. I.e. it couldn't track used and unused fields if you
+      Tag can watch what fields were used only when you are rendering them with
+      'zenforms' tags. I.e. it couldn't track used and unused fields if you
       place them manually.
 
 
@@ -154,6 +162,29 @@ class InlineZenformTag(ZenformTag):
 
 
 class MultifieldTag(Tag):
+    """
+    ``{% multifield %}`` tag allows you to group fields in form.
+    For example, first name and last name in your login form.
+
+    **Usage** ::
+
+        {% multifield args as varname [label 'Label'] %}
+
+    **args**
+      List of form field names, which you want to group. Quotes are nessecary.
+
+    **varname**
+      Output variable name. Quotes are not nessecary.
+
+    **label**
+      Optional group's name.
+
+    Example::
+
+        {% multifield 'first_name' 'last_name' as credentials label 'Enter your name' %}
+        {% fieldset credentials 'password1' 'password2' %}
+
+    """
     name = 'multifield'
     options = Options(
         MultiValueArgument('fields'),
