@@ -96,7 +96,14 @@ class ZenformTag(Tag):
 
     def prepare_form(self, form):
         for field in form:
-            css_class = self.field_mapping(type(field.field))
+            css_class = ''
+            try:
+                css_class = self.field_mapping[type(field.field)]
+            except KeyError:
+                pass
+            if field.name in form.errors:
+                css_class += ' error'
+
             if 'class' in field.field.widget.attrs:
                 field.field.widget.attrs['class'] += ' %s' % css_class
             else:
