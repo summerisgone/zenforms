@@ -47,7 +47,7 @@ setup(
     ],
     packages=find_packages(exclude=['example', 'example.*']),
 
-    install_requires=['django-classy-tags',],
+    install_requires=['django-classy-tags >=0.3,<0.4',],
     include_package_data=True,
     zip_safe=False,
     long_description=read('README'),
