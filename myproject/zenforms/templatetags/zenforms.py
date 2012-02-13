@@ -6,6 +6,8 @@ from django.db.models.fields import FieldDoesNotExist
 from django.forms.forms import BoundField
 from django.template import loader
 from django.utils.safestring import SafeUnicode
+from django import forms
+
 
 DEFAULT_OPTIONS = {
     'method': 'post',
@@ -87,12 +89,25 @@ class ZenformTag(Tag):
         MultiKeywordArgument('options', required=False, default=DEFAULT_OPTIONS),
         blocks=[('endzenform', 'nodelist')],
     )
+    field_mapping = {
+        forms.CharField: 'textInput',
+        forms.EmailField: 'textInput',
+    }
+
+    def prepare_form(self, form):
+        for field in form:
+            css_class = self.field_mapping(type(field.field))
+            if 'class' in field.field.widget.attrs:
+                field.field.widget.attrs['class'] += ' %s' % css_class
+            else:
+                field.field.widget.attrs['class'] = ' %s' % css_class
+        return form
 
     def render_tag(self, context, form, options, nodelist):
         context.push()
         real_options = DEFAULT_OPTIONS.copy()
         real_options.update(options)
-        context['form'] = form
+        context['form'] = self.prepare_form(form)
         context['options'] = real_options
         context['unused_fields'] = form.fields.keys()
         output = self.render_prefix(context) + nodelist.render(context) + self.render_postfix(context)
@@ -108,7 +123,7 @@ class ZenformTag(Tag):
         return template.render(context)
 
 
-class InlineZenformTag(Tag):
+class InlineZenformTag(ZenformTag):
     name = 'izenform'
     options = Options(
         Argument('form'),
@@ -120,11 +135,11 @@ class InlineZenformTag(Tag):
         context.push()
         real_options = DEFAULT_OPTIONS.copy()
         real_options.update(options)
-        context['form'] = form
+        context['form'] = self.prepare_form(form)
+        context['fields'] = context['form']
         context['options'] = real_options
-        context['fields'] = form
-        prefix = loader.get_template('zenforms/zenform_prefix.html').render(context)
-        postfix = loader.get_template('zenforms/zenform_postfix.html').render(context)
+        prefix = self.render_prefix(context)
+        postfix = self.render_postfix(context)
         content = loader.get_template('zenforms/zenform_inline.html').render(context)
         output = prefix + content + postfix
         context.pop()
