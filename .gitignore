@@ -1,3 +1,4 @@
 .idea/*
 dist/*
 django_zenforms.egg-info/*
+docs/_build/
