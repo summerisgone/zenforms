@@ -121,6 +121,7 @@ class InlineZenformTag(ZenformTag):
     def render_tag(self, context, form, options):
         context.push()
         real_options = DEFAULT_OPTIONS.copy()
+        real_options.update({'izenform': True})
         real_options.update(options)
         context['form'] = self.prepare_form(form)
         context['fields'] = context['form']

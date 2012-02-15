@@ -186,3 +186,17 @@ Options are the same as for {% zenform %} tags:
 **Template**
 
 Tag uses ``zenforms/zenform_inline.html`` template. Nothing interesting there.
+
+
+=======
+Options
+=======
+
+There are several pre-defined options.
+
+* notag - if ``options.notag`` returns True, form will be rendered without tag
+* action - form action
+* method - form method
+* inline - if ``options.inline`` returns True, form will be rendered in alternate layout, 
+  the label is on the left side of field, rather than on the top
+* submit - submit text, used in ``zenforms/submit.html`` template, as submit control value.

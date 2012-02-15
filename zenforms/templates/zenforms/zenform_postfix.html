@@ -1,6 +1,9 @@
 {% csrf_token %}
-{% if options.no_form_tag %}
+{% if options.notag %}
 {% else %}
+    {% if options.izenform %}
+        {% include "zenforms/submit.html" %}
+    {% endif %}
     </form>
     <script type="text/javascript">
         $('form.uniForm').uniform();
