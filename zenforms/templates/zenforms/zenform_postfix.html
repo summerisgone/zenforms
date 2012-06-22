@@ -1,4 +1,6 @@
+{% if not options.nocsrf %}
 {% csrf_token %}
+{% endif %}
 {% if options.notag %}
 {% else %}
     {% if options.izenform %}
