@@ -195,6 +195,7 @@ Options
 There are several pre-defined options.
 
 * notag - if ``options.notag`` returns True, form will be rendered without tag
+* nocsrf - zeonforms automatically insert ``{% scrf_token %}`` in all forms. If you're using GET method, you'll definetly need this option.
 * action - form action
 * method - form method
 * inline - if ``options.inline`` returns True, form will be rendered in alternate layout, 
