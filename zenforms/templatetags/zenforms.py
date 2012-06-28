@@ -83,6 +83,8 @@ class ZenformTag(Tag):
                 pass
             if field.name in form.errors:
                 css_class += ' error'
+            if field.field.required:
+                css_class += ' required'
 
             if 'class' in field.field.widget.attrs:
                 field.field.widget.attrs['class'] += ' %s' % css_class
