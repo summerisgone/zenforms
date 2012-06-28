@@ -1,6 +1,6 @@
 {% load zenforms %}
 {% if not field.field.widget.is_hidden %}
-<div class="ctrlHolder {% if field.errors %}error{% endif %}">
+<div class="ctrlHolder {% if field.errors %}error{% endif %} {% if field.field.required %}required{% endif %}">
     {% if field.errors %}
         {{ field.errors }}
     {% endif %}
