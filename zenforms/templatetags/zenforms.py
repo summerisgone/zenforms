@@ -72,6 +72,11 @@ class ZenformTag(Tag):
     field_mapping = {
         forms.CharField: 'textInput',
         forms.EmailField: 'textInput',
+        forms.IntegerField: 'textInput',
+        forms.RegexField: 'textInput',
+        forms.DateField: 'textInput',
+        forms.DecimalField: 'textInput',
+        forms.FloatField: 'textInput',
     }
 
     def prepare_form(self, form):
