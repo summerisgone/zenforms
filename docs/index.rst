@@ -5,6 +5,7 @@ Contents:
    :maxdepth: 2
 
    usage
+   changelog
 
 .. include:: ../README.rst
 

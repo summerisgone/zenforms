@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset {% if options.inline %}class="inlineLabels"{% endif %}>
 {% for field in fields %}
     {% include 'zenforms/field.html' %}
 {% endfor %}

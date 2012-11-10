@@ -72,6 +72,11 @@ class ZenformTag(Tag):
     field_mapping = {
         forms.CharField: 'textInput',
         forms.EmailField: 'textInput',
+        forms.IntegerField: 'textInput',
+        forms.RegexField: 'textInput',
+        forms.DateField: 'textInput',
+        forms.DecimalField: 'textInput',
+        forms.FloatField: 'textInput',
     }
 
     def prepare_form(self, form):
@@ -83,6 +88,8 @@ class ZenformTag(Tag):
                 pass
             if field.name in form.errors:
                 css_class += ' error'
+            if field.field.required:
+                css_class += ' required'
 
             if 'class' in field.field.widget.attrs:
                 field.field.widget.attrs['class'] += ' %s' % css_class
@@ -121,6 +128,7 @@ class InlineZenformTag(ZenformTag):
     def render_tag(self, context, form, options):
         context.push()
         real_options = DEFAULT_OPTIONS.copy()
+        real_options.update({'izenform': True})
         real_options.update(options)
         context['form'] = self.prepare_form(form)
         context['fields'] = context['form']

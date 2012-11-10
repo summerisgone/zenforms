@@ -1,6 +1,8 @@
 {% load zenforms %}
 <div class="ctrlHolder {% for subfield in field.fields %}{% if subfield.errors %}error {% endif %}{% endfor %}">
-<label >{{ field.label }}</label>
+
+<p class="fieldLabel">{% if field.label %}{{ field.label }}{% endif %}</p>
+
 <ul>
 {% for subfield in field.fields %}
     <li>

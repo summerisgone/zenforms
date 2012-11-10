@@ -187,7 +187,6 @@ Options are the same as for {% zenform %} tags:
 
 Tag uses ``zenforms/zenform_inline.html`` template. Nothing interesting there.
 
-
 {{ form.field|attrs:"class=required"}}
 --------------------------------------
 
@@ -199,3 +198,19 @@ If you want to quickly modify input attribute, you can use ``attrs`` tempalte fi
     {{ form.field|attrs:"attr1=value1,attr2=value2,attr3=value3 value4" }}
 
 Pretty simple to write more.
+
+
+===============
+Zenform options
+===============
+
+There are several pre-defined options.
+
+* notag - if ``options.notag`` returns True, form will be rendered without tag
+* nocsrf - zeonforms automatically insert ``{% scrf_token %}`` in all forms. If you're using GET method, you'll definetly need this option.
+* action - form action
+* method - form method
+* inline - if ``options.inline`` returns True, form will be rendered in alternate layout, 
+  the label is on the left side of field, rather than on the top
+* submit - submit text, used in ``zenforms/submit.html`` template, as submit control value.
+

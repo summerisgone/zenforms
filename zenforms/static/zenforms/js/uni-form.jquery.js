@@ -56,7 +56,7 @@ jQuery.fn.uniform = function(settings) {
         })
 
         // Select form fields and attach them higlighter functionality
-        form.find(settings.field_selector).each(function(){
+        form.find(settings.field_selector).not(':submit').each(function(){
             var $input = $(this),
                 value = $input.val();
 

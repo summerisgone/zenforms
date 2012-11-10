@@ -1,15 +1,18 @@
-{% if options.no_form_tag %}
+{% if options.notag %}
 {% else %}
     <form class="uniForm" action="{{ options.action }}" method="{{ options.method }}" enctype="application/x-www-form-urlencoded">
 {% if form.non_field_errors %}
     <div id="errorMsg">
         {% load i18n %}
-        <h3>{% trans "Please correct the error below" %}</h3>
+        <h3>
+        {% blocktrans count form.non_field_errors|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+        </h3>
         <ol>
             {% for error in form.non_field_errors %}
-                <li>{{ erorr }}</li>
+                <li>{{ error }}</li>
             {% endfor %}
         </ol>
     </div>
 {% endif %}
 {% endif %}
+{{ form.media }}
