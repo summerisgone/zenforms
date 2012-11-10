@@ -186,3 +186,16 @@ Options are the same as for {% zenform %} tags:
 **Template**
 
 Tag uses ``zenforms/zenform_inline.html`` template. Nothing interesting there.
+
+
+{{ form.field|attrs:"class=required"}}
+--------------------------------------
+
+If you want to quickly modify input attribute, you can use ``attrs`` tempalte filter.
+
+
+**Usage:** ::
+
+    {{ form.field|attrs:"attr1=value1,attr2=value2,attr3=value3 value4" }}
+
+Pretty simple to write more.

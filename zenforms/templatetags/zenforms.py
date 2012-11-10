@@ -286,6 +286,15 @@ def widget_type(field):
     if isinstance(field, BoundField):
         return str(field.field.widget.__class__.__name__)
 
+@register.filter
+def attrs(field, attribute_description):
+    attributes = attribute_description.split(",")
+    for attribute in attributes:
+        attr_name, attr_value = attribute.split('=')
+        attr_value = attr_value.strip('"').strip("'")
+        field.field.widget.attrs[attr_name] = attr_value
+    return field
+
 register.tag(ZenformTag)
 register.tag(InlineZenformTag)
 register.tag(MultifieldTag)
